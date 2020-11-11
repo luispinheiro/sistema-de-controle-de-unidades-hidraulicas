@@ -1,0 +1,10 @@
+*.class
+.settings
+.classpath
+.factorypath
+.project
+target/
+bin/
+Modificacoes
+*.swp
+*.swo

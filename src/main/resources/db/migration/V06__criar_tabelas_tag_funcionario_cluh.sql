@@ -1,0 +1,56 @@
+CREATE TABLE tag (
+    id BIGINT (20) PRIMARY KEY AUTO_INCREMENT,
+    codigo VARCHAR (20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE cluh (
+    id BIGINT (20) PRIMARY KEY AUTO_INCREMENT,
+    data_criacao DATETIME NOT NULL,
+    nivel INTEGER NOT NULL,
+    abastecimento DECIMAL (4,1) NOT NULL,
+    condicao VARCHAR(10) NOT NULL,
+    observacao TEXT,
+    tag_id BIGINT (20) NOT NULL,
+    codigo_usuario BIGINT(20) NOT NULL,
+    FOREIGN KEY (tag_id) REFERENCES tag (id),
+    FOREIGN KEY (codigo_usuario) REFERENCES usuario(codigo)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO tag VALUES
+  (0,'UHC-R6-01-075'),
+  (0,'UHC-R6-02-350'),
+  (0,'UHC-R6-03-600'),
+  (0,'UHC-R6-04-600'),
+  (0,'UHC-R6-05-075'),
+  (0,'UHC-R6-06-075'),
+  (0,'UHC-R6-07-140'),
+  (0,'UHC-R6-08-075'),
+  (0,'UHC-R6-09-140'),
+  (0,'UHC-R6-10-120'),
+  (0,'UHC-R6-11-200'),
+  (0,'UHC-R6-12-900'),
+  (0,'UHC-R6-13-075'),
+  (0,'UHC-R6-14-075'),
+  (0,'UHC-R6-15-500'),
+  (0,'UHC-R6-16-075'),
+  (0,'UHC-R6-17-075'),
+  (0,'UHC-R6-18-075'),
+  (0,'UHC-R6-19-200'),
+  (0,'UHC-R6-20-920'),
+  (0,'UHC-R6-21-550'),
+  (0,'UHC-R6-22-075'),
+  (0,'UHC-R6-23-075'),
+  (0,'UHC-R6-24-075'),
+  (0,'UHC-R6-25-075'),
+  (0,'UHC-R3-01-250'),
+  (0,'UHC-R3-02-250'),
+  (0,'UHC-R3-03-120'),
+  (0,'UHC-CO-01-130'),
+  (0,'UHC-CO-02-60'),
+  (0,'UHC-CO-03-110'),
+  (0,'UHC-PP-01-2000'),
+  (0,'UHC-PP-02-75'),
+  (0,'UHC-PP-03-400'),
+  (0,'UHC-IN-01-100'),
+  (0,'UHC-PU-01-250'),
+  (0,'UHC-PU-02-900');

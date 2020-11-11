@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/LayoutPadrao}"
+	xmlns:data="http://www.thymeleaf.org/extras/data"
+	xmlns:brewer="http://brewer.algaworks.com">
+	
+<head>
+	<title>Pesquisa de Unidades Hidráulicas</title>
+</head>
+
+<body>
+<section layout:fragment="conteudo">
+	<div class="page-header">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-xs-10">
+					<h1>Pesquisa Unidades Hidráulicas</h1>
+				</div>
+				
+				<div class="col-xs-2">
+					<div class="aw-page-header-controls">
+						<a class="btn  btn-default" th:href="@{/mecanicas/cluhs/novo}">
+							<i class="glyphicon  glyphicon-plus-sign"></i> <span class="hidden-xs  hidden-sm">Novo Checklist</span>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="container-fluid">
+		<form method="GET" th:object="${cluhFilter}">
+			<div class="row">
+				<div class="col-sm-6  form-group">
+					<label for="tag" class="control-label">Tags</label>
+					<div class="bw-field-action">
+						<select id="tag" class="form-control" th:field="*{tag}">
+							<option value="">Todas as Tags</option>
+							<option th:each="tag : ${tags}" th:value="${tag.id}" th:text="${tag.codigo}">UHC-R6-01-075r</option>
+						</select>
+					</div>
+				</div>
+				
+				<div class="col-sm-6  form-group">
+					<label for="condicao" class="control-label">Condição</label>
+					<select id="condicao" class="form-control"  th:field="*{condicao}">
+						<option value="">Todas as Condições</option>
+						<option th:each="condicao : ${condicoes}" th:value="${condicao}" th:text="${condicao.descricao}">Limpo</option>
+					</select>
+				</div>		
+								
+				<div class="col-sm-3  form-group">
+					<label for="nivelDe" class="control-label">Nível de</label>
+					<div class="input-group">
+						<input id="nivelDe" type="text" class="form-control  js-decimal" th:field="*{nivelDe}"/>
+						<div class="input-group-addon">%</div>
+					</div>
+				</div>
+				<div class="col-sm-3  form-group">
+					<label for="nivelAte" class="control-label">Nível até</label>
+					<div class="input-group">
+						<input id="nivelAte" type="text" class="form-control  js-decimal" th:field="*{nivelAte}"/>
+						<div class="input-group-addon">%</div>
+					</div>
+				</div>
+
+				<div class="col-sm-3  form-group">
+					<label for="abastecimento" class="control-label">Abastecido de</label>
+					<div class="input-group">
+						<input id="abastecidoDe" type="text" class="form-control  js-decimal" th:field="*{abastecidoDe}"/>
+						<div class="input-group-addon">L</div>
+					</div>
+				</div>
+				<div class="col-sm-3  form-group">
+					<label for="abastecimento" class="control-label">Abastecido até</label>
+					<div class="input-group">
+						<input id="abastecidoAte" type="text" class="form-control  js-decimal" th:field="*{abastecidoAte}"/>
+						<div class="input-group-addon">L</div>
+					</div>
+				</div>
+				
+			</div>
+			<div class="row">						
+				<div class="col-sm-12  form-group">
+					<label for="obs" class="control-label">Observação</label>
+					<input id="obs" type="text" class="form-control" th:field="*{observacao}">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<button class="btn  btn-primary" type="submit">Pesquisar</button>
+			</div>
+		</form>
+		<div class="table-responsive  bw-tabela-simples">
+			<table class="table  table-hover">
+				<thead>
+					<tr>
+						<th class="table-cluhs-col-sku">
+							<brewer:order page="${pagina}" field="dataCriacao" text="Data de criação"/>
+						</th>
+						<th class="table-cluhs-col-origem">
+							<brewer:order page="${pagina}" field="tag" text="Tag"/>
+						</th>
+						<th class="table-cluhs-col-estilo">
+							<brewer:order page="${pagina}" field="u.nome" text="Funcionário"/>
+						</th>
+						<th class="table-cluhs-col-estilo">
+							<brewer:order page="${pagina}" field="u.turno" text="Turno"/>
+						</th>
+						<th class="table-cluhs-col-origem">Nível</th>
+						<th class="table-cluhs-col-origem">Abastecimento</th>
+						<th class="table-cluhs-col-origem">condição</th>
+						<th class="table-cluhs-col-acoes">Ações</th>
+					</tr>
+				</thead>
+				
+				<tbody>
+					<tr th:each="cluh : ${pagina.conteudo}">
+						<td class="text-center"  th:text="${cluh.dataCriacao}">15/03/2020</td>
+							
+						<td th:text="${cluh.tag.codigo}">UH-R6-01075</td>
+							
+						<td th:text="${cluh.usuario.nome}">Sandro</td>
+ 						<td th:text="${cluh.usuario.turno}">Primeiro</td> 
+						<td  th:text="|${cluh.nivel} %|">80</td>
+						<td  th:text="|${cluh.abastecimento} L|">20</td>
+						<td  th:text="${cluh.condicao}">Limpo</td>
+						<td class="text-center">
+							<a class="btn  btn-link  btn-xs  js-tooltip" title="Editar" 
+									th:href="@{/mecanicas/cluhs/{id}(id=${cluh.id})}"> 
+								<i class="glyphicon glyphicon-pencil"></i>
+							</a>
+							<a class="btn  btn-link  btn-xs  js-tooltip  js-exclusao-btn" title="Excluir" href="#" 
+									data:url="@{/mecanicas/cluhs/{id}(id=${cluh.id})}"
+									data:objeto="${cluh.tag.codigo}">
+								<i class="glyphicon glyphicon-remove"></i>
+							</a>
+						</td>
+					</tr>
+					<tr th:if="${pagina.vazia}">
+						<td colspan="7">Nenhum Checklist encontrado</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+				
+		<brewer:pagination page="${pagina}"/>
+	</div>
+
+</section>
+</body>
+</html>

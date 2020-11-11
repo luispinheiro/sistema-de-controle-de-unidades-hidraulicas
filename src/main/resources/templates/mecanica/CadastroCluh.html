@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/LayoutPadrao}"
+	xmlns:brewer="http://brewer.algaworks.com">
+	
+<head>
+	<title>Tenaris - UH</title>
+	
+	<link rel="stylesheet" th:href="@{/stylesheets/vendors/upload.min.css}"/>
+</head>
+
+<body>
+<section layout:fragment="conteudo">
+
+	<div class="page-header">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-xs-10">
+					<h1 th:if="${cluh.novo}">Checklist Unidades Hidráulicas</h1>
+					<h1 th:unless="${cluh.novo}" th:text="|Edição da ${cluh.tag.codigo}|">Edição de cluh</h1>
+				</div>
+				
+				<div class="col-xs-2">
+					<div class="aw-page-header-controls">
+						<a class="btn  btn-default" th:href="@{/mecanicas/cluhs}">
+							<i class="glyphicon  glyphicon-search"></i> <span class="hidden-xs  hidden-sm">Pesquisa</span>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container-fluid">
+		
+		<form method="POST" th:object="${cluh}" class="form-vertical  js-form-loading" th:action="@{/mecanicas/cluhs/novo}">
+			<brewer:message/>
+			
+			<input type="hidden" th:field="*{id}"/>
+			
+			<div class="row">
+				<div class="col-sm-3  form-group  bw-required" brewer:classforerror="tag">
+					<label for="tag" class="control-label">Tag</label>
+					<div class="bw-field-action">
+						<select id="tag" class="form-control" th:field="*{tag}">
+							<option value="">Selecione a tag</option>
+							<option th:each="tag : ${tags}" th:value="${tag.id}" th:text="${tag.codigo}">UHC-R6-01-075r</option>
+						</select>
+						
+						<div class="bw-field-action__icon">
+							<a href="#" data-toggle="modal" data-target="#modalCadastroRapidoTag">
+								<i class="glyphicon  glyphicon-plus-sign  bw-glyphicon-large"></i>
+							</a>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-3  form-group  bw-required" brewer:classforerror="nivel">
+					<label for="nivel" class="control-label">Nível</label>
+					<div class="input-group">
+						<input id="nivel" type="text" class="form-control   js-plain" th:field="*{nivel}"/>
+						<div class="input-group-addon">%</div>
+					</div>
+				</div>
+				<div class="col-sm-3  form-group  bw-required" brewer:classforerror="abastecimento">
+					<label for="abastecimento" class="control-label">Abastecimento</label>
+					<div class="input-group">
+						<input id="abastecimento" type="text" class="form-control  js-decimal" 
+							th:field="*{abastecimento}"/>
+						<div class="input-group-addon">L</div>
+					</div>
+				</div>
+				<div class="col-sm-3  form-group  bw-required" brewer:classforerror="condicao">
+					<label for="condicao" class="control-label">Condição</label>
+					<select id="condicao" class="form-control" th:field="*{condicao}">
+						<option value="">Selecione a condicao</option>
+						<option th:each="condicao : ${condicoes}" th:value="${condicao}" th:text="${condicao.descricao}">Limpo</option>
+					</select>
+				</div>						
+			</div>
+			
+			<div class="row">						
+				<div class="col-sm-12  form-group  bw-required" brewer:classforerror="observacao">
+					<label for="obs" class="control-label">Observação</label>
+					<textarea id="obs" class="form-control" rows="3" th:field="*{observacao}">
+					</textarea>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<button class="btn  btn-primary" type="submit">Salvar</button>
+			</div>	
+			
+		</form>
+	</div>
+
+	<div th:replace="tag/CadastroRapidoTag :: modal"></div>
+</section>
+
+<th:block layout:fragment="javascript-extra">
+	<script th:src="@{/javascripts/tag.cadastro-rapido.js}"></script>
+	<script th:src="@{/javascripts/vendors/uikit.min.js}"></script>
+	<script th:src="@{/javascripts/vendors/upload.min.js}"></script>
+	<script th:src="@{/javascripts/vendors/handlebars.min.js}"></script>
+</th:block>
+
+</body>
+</html>
