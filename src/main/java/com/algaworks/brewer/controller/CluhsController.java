@@ -74,6 +74,7 @@ public class CluhsController {
 
 		PageWrapper<Cluh> paginaWrapper = new PageWrapper<>(cluhs.filtrar(cluhFilter, pageable), httpServletRequest);
 		mv.addObject("pagina", paginaWrapper);
+		
 		return mv;
 	}
 	
