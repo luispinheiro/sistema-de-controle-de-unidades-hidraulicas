@@ -11,8 +11,6 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -24,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import com.algaworks.brewer.model.Cluh;
-import com.algaworks.brewer.model.Usuario;
 import com.algaworks.brewer.repository.filter.CluhFilter;
 import com.algaworks.brewer.repository.paginacao.PaginacaoUtil;
 
@@ -43,6 +40,8 @@ public class CluhsImpl implements CluhsQueries {
 		CriteriaBuilder builder = manager.getCriteriaBuilder();
 		CriteriaQuery<Cluh> query = builder.createQuery(Cluh.class);
 		Root<Cluh> cluhEntity = query.from(Cluh.class);
+		cluhEntity.fetch("tag"); //Aqui ele faz o fecth e tráz a junto as tags relacionadas na mesma query
+		cluhEntity.fetch("usuario");//Traz o usuário relacionado na mesma query
 		Predicate[] filtros = adicionarFiltro(filtro, cluhEntity);
 
 		query.select(cluhEntity).where(filtros); 
@@ -68,9 +67,9 @@ public class CluhsImpl implements CluhsQueries {
 		List<Predicate> predicateList = new ArrayList<>();
 		CriteriaBuilder builder = manager.getCriteriaBuilder();
 
-		Join<Cluh, Usuario> joinsuario = cluhEntity.join("usuario", JoinType.INNER);
-	
-		joinsuario.alias("u");
+		//retirei esta parte pois estava fazendo um select a mais, o fetch anterior resolve.
+		//Join<Cluh, Usuario> joinsuario = cluhEntity.join("usuario", JoinType.INNER);
+		//joinsuario.alias("u");
 		
 		if (filtro != null) {
 			
@@ -85,11 +84,11 @@ public class CluhsImpl implements CluhsQueries {
 			}
 		
 			if (!StringUtils.isEmpty(filtro.getNomeUsuario())) {
-				predicateList.add(builder.like(cluhEntity.get("u.nome"), filtro.getNomeUsuario()));
+				predicateList.add(builder.like(cluhEntity.get("usuario").get("nome"), filtro.getNomeUsuario()));
 			}
 			
 			if (!StringUtils.isEmpty(filtro.getTurnoUsuario())) {
-				Expression<String> likeTurno = cluhEntity.get("u.turno");
+				Expression<String> likeTurno = cluhEntity.get("usuario").get("turno");
 			
 				predicateList.add(builder.like(likeTurno, filtro.getTurnoUsuario()));
 			}
